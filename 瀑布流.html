@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				background-color: skyblue;
+			}
+			ul{
+				width: 1280px;
+				padding: 0;
+				padding-left:20px;
+				margin: 0 auto;
+				list-style: none;
+			}
+			ul:after{
+				content: '';
+				display: block;
+				clear: both;
+			}
+			li{
+				width: 300px;
+				margin-right: 20px;
+				float: left;
+			}
+			img{
+				width: 300px;
+				margin-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="box">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</body>
+	<script>
+		//preview
+		let num = 0;
+		let onoff = false;
+		let lis = Array.prototype.slice.call(document.querySelectorAll('#box li'));
+			
+		falls(num);
+		
+		document.onscroll = function(){
+			if(!onoff && getSmall().getBoundingClientRect().bottom<=window.innerHeight){
+				falls(++num);
+			}
+		}
+		
+		function falls(num){
+			onoff = true;
+			let os = document.createElement('script');
+			os.src = 'http://www.wookmark.com/api/json/popular?page='+num+'&callback=fn';
+			document.getElementsByTagName('head')[0].append(os);
+    		os.remove();
+			
+		}
+		function getSmall(){
+			let arr = [];
+			lis.forEach(e=>{
+				arr.push(e.scrollHeight);
+			});
+			return lis[arr.findIndex(e=>e==Math.min.apply('',arr))];
+		}
+		function fn(data){
+			if(!data.length) return;
+			data.forEach(e=>{
+				let div = document.createElement('div');
+				let img = new Image();
+				img.src = e.preview;
+				div.appendChild(img);
+				img.onload = function(){
+					let li = getSmall();
+					li.appendChild(div);
+				}
+			});
+			onoff = false;
+		}
+	</script>
+</html>
