@@ -1,4 +1,9 @@
+import "babel-plugin-transform-object-rest-spread";
+import "babel-preset-env";
+import "babel-preset-react";
 
+
+import 'babel-loader';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
